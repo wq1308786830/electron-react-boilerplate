@@ -2,10 +2,13 @@
   "name": "electron-react-boilerplate",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://nei.netease.com/api/apimock/1d150f1ef158dbd6bb3b95fe12d5400a/",
   "dependencies": {
+    "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "source-map-explorer": "^2.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
