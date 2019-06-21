@@ -2,8 +2,12 @@
   "name": "electron-react-boilerplate",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://nei.netease.com/api/apimock/1d150f1ef158dbd6bb3b95fe12d5400a/",
   "dependencies": {
+    "caniuse-lite": "^1.0.30000974",
+    "mobx": "^5.10.1",
+    "mobx-react": "^6.1.1",
+    "mobx-react-devtools": "^6.1.1",
+    "mobx-state-tree": "^3.14.0",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -18,6 +22,10 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "resolutions": {
+    "browserslist": "4.6.2",
+    "caniuse-lite": "1.0.30000974"
   },
   "browserslist": {
     "production": [
