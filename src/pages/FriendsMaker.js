@@ -4,16 +4,13 @@ import { useStore } from '../store';
 
 export const FriendsMaker = observer(() => {
   const store = useStore();
-  const onSubmit = React.useCallback(({ preventDefault, name, favorite, single }) => {
-    preventDefault();
-    store.makeFriend(name, favorite, single);
+  const onAdd = React.useCallback(() => {
+    store.add();
   }, [store]);
   return (
-    <form onSubmit={onSubmit}>
-      Total friends: {store.friends.length}
-      <input type="text" id="name" />
-      <input type="checkbox" id="favorite" />
-      <input type="checkbox" id="single" />
-    </form>
+    <div>
+      Count in self is: {store.count}
+      <button onClick={onAdd}>Add Count</button>
+    </div>
   );
 });

@@ -1,9 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.scss';
 import { FriendsMaker } from './pages/FriendsMaker';
 import { MatchMaker } from './pages/MatchMaker';
-import {StoreProvider} from "./store";
+import { StoreProvider } from './store';
+import logo from './logo.svg';
+import './App.scss';
 
 function App() {
   return (
