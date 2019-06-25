@@ -25,7 +25,7 @@ const Simple = observer(() => {
   return (
     <>
       <p>remainingTodos: {remainingTodos}</p>
-      <button onClick={onPrint}>打印</button>
+      <button onClick={() => onPrint('')}>打印</button>
       <Link to={'/'}>Page Index</Link>
     </>
   );

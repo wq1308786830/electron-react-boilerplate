@@ -70,12 +70,12 @@ async function createWindow() {
 
   // and load the index.html of the app.
   if (isDev) {
-    mainWindow.loadURL('http://localhost:8000/');
+    mainWindow.loadURL('http://localhost:3000/');
     // Open the DevTools only if in development mode.
     mainWindow.webContents.openDevTools();
   } else {
     mainWindow.loadFile(
-      path.resolve(path.join(__dirname, '../dist/index.html'))
+      path.resolve(path.join(__dirname, '../build/index.html'))
     );
   }
 

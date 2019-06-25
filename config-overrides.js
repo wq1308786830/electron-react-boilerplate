@@ -11,11 +11,18 @@ module.exports = override(
     libraryDirectory: 'es',
     style: true
   }),
+
   addLessLoader({
     javascriptEnabled: true,
     modifyVars: { '@primary-color': '#1DA57A' }
   }),
+
   addWebpackAlias({
     '@': require('path').resolve(__dirname, 'src')
-  })
+  }),
+
+  config => {
+    config.output.publicPath = './';
+    return config;
+  }
 );
