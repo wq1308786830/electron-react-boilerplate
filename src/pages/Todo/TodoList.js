@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite/dist/index';
-import TodoStore from '../../stores/TodoStore';
+import TodoStore from '@/stores/TodoStore';
 
 const TodoList = observer(() => {
   const { todos, toggleTodo } = useContext(TodoStore);
