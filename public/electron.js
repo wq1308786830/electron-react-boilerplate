@@ -44,6 +44,7 @@ async function createWindow() {
     mainWindow.loadFile(
       path.resolve(path.join(__dirname, '../build/index.html'))
     );
+    mainWindow.webContents.openDevTools();
   }
 
   // Emitted when the window is closed.
@@ -108,6 +109,7 @@ function initPrintEvent() {
   ipcMain.on('print', (event, deviceName) => {
     const printers = printWindow.webContents.getPrinters();
     console.log(printers);
+    event.reply('asynchronous-reply', printers);
     printers.forEach(element => {
       if (element.name === deviceName) {
         console.log(element);
@@ -118,7 +120,7 @@ function initPrintEvent() {
       }
     });
     printWindow.webContents.print(
-      { silent: true, printBackground: true, deviceName: 'HP-LaserJet-1020' },
+      { silent: true, printBackground: true, deviceName: 'HP LaserJet 1020' },
       data => {
         console.log('回调', data);
         event.sender.send('print-successs');
