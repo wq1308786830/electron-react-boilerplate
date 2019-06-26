@@ -118,7 +118,7 @@ function initPrintEvent() {
       }
     });
     printWindow.webContents.print(
-      { silent: true, printBackground: true, deviceName: deviceName },
+      { silent: true, printBackground: true, deviceName: 'HP-LaserJet-1020' },
       data => {
         console.log('回调', data);
         event.sender.send('print-successs');
