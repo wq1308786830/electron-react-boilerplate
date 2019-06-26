@@ -1,43 +1,10 @@
 // Modules to control application life and create native browser window
 
 const path = require('path');
-const exec = require('child_process').exec;
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 const isDev = process.env.NODE_ENV === 'development';
 
-/**
- * 监听渲染进程的打印请求
- */
-ipcMain.on('print', async (event, arg) => {
-  // todo:下载网络文件到本地打印
-  arg.pdf = `${__dirname}/ReferenceCard.pdf`;
-  const fileUrl = arg.pdf;
-  switch (process.platform) {
-    case 'darwin':
-    case 'linux':
-      await exec('lp ' + fileUrl, e => {
-        if (e) throw e;
-      });
-      event.reply('asynchronous-reply', 'print done!');
-      break;
-    case 'win32':
-      await exec(
-        'print ' + fileUrl,
-        {
-          windowsHide: true
-        },
-        e => {
-          if (e) throw e;
-        }
-      );
-      event.reply('asynchronous-reply', 'print done!');
-      break;
-    default:
-      event.reply('asynchronous-reply', 'print failed!');
-      throw new Error('Platform not supported.');
-  }
-});
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -98,7 +65,10 @@ isDev &&
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  createPrintWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
@@ -115,3 +85,44 @@ app.on('activate', function() {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+let printWindow = null;
+function createPrintWindow() {
+  const windowOptions = {
+    width: 100,
+    height: 100,
+    title: '打印页',
+    show: false
+  };
+  printWindow = new BrowserWindow(windowOptions);
+  printWindow.loadURL(path.join('file://', __dirname, './print.html'));
+
+  initPrintEvent();
+}
+
+function initPrintEvent() {
+  ipcMain.on('print-start', (event, deviceName) => {
+    console.log('print-start');
+    printWindow.webContents.send('print-edit', deviceName);
+  });
+
+  ipcMain.on('print', (event, deviceName) => {
+    const printers = printWindow.webContents.getPrinters();
+    console.log(printers);
+    printers.forEach(element => {
+      if (element.name === deviceName) {
+        console.log(element);
+      }
+      if (element.name === deviceName && element.status != 0) {
+        mainWindow.send('print-error', deviceName + '打印机异常');
+        return;
+      }
+    });
+    printWindow.webContents.print(
+      { silent: true, printBackground: true, deviceName: deviceName },
+      data => {
+        console.log('回调', data);
+        event.sender.send('print-successs');
+      }
+    );
+  });
+}
