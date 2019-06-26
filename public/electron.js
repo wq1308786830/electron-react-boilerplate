@@ -31,7 +31,7 @@ async function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'electron/preload.js')
     }
   });
 
@@ -95,7 +95,9 @@ function createPrintWindow() {
     show: false
   };
   printWindow = new BrowserWindow(windowOptions);
-  printWindow.loadURL(path.resolve(path.join(__dirname, '../build/print.html')));
+  printWindow.loadURL(
+    path.resolve(path.join(__dirname, '../build/index.html'))
+  );
 
   initPrintEvent();
 }
