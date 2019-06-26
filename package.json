@@ -1,15 +1,14 @@
 {
   "name": "electron-react-boilerplate",
   "version": "0.1.0",
+  "author": "Russell <flyingcycling@outlook.com>",
   "description": "electron-react-boilerplate",
-  "main": "app/main.js",
-  "build": {
-    "appId": "com.electron.electron-react-boilerplate",
-    "mac": {
-      "category": "your.app.category.type"
-    }
-  },
+  "productName": "electron-react-boilerplate",
+  "main": "public/electron.js",
+  "compression": "store",
+  "electronVersion": "5.0.5",
   "private": true,
+  "homepage": "./",
   "dependencies": {
     "antd": "^3.19.7",
     "history": "^4.9.0",
@@ -30,6 +29,7 @@
     "customize-cra": "^0.2.13",
     "electron": "^5.0.5",
     "electron-builder": "^20.44.4",
+    "electron-builder-squirrel-windows": "^20.44.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-reload": "^1.4.0",
     "eslint-config-prettier": "^5.0.0",
@@ -55,9 +55,9 @@
     "electron-dev": "cross-env NODE_ENV=development electron .",
     "electron-prod": "cross-env NODE_ENV=production electron .",
     "pack:win": "npm run clean && npm run build && npm run private:build:win",
-    "private:build:win": "electron-builder -c.extraMetadata.main=app/main.js --win --x64",
+    "private:build:win": "electron-builder --win --publish never",
     "start": "react-app-rewired start",
-    "clean": "rimraf build",
+    "clean": "rimraf build & rimraf dist",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "lint": "eslint --fix ./src && echo 'Lint complete.'",
