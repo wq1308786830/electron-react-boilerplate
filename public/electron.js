@@ -95,7 +95,7 @@ function createPrintWindow() {
     show: false
   };
   printWindow = new BrowserWindow(windowOptions);
-  printWindow.loadURL(path.join('file://', __dirname, './print.html'));
+  printWindow.loadURL(path.resolve(path.join(__dirname, '../build/print.html')));
 
   initPrintEvent();
 }
@@ -106,10 +106,10 @@ function initPrintEvent() {
     printWindow.webContents.send('print-edit', deviceName);
   });
 
-  ipcMain.on('print', (event, deviceName) => {
+  ipcMain.on('print', (event, deviceName = 'HP LaserJet 1020') => {
     const printers = printWindow.webContents.getPrinters();
     console.log(printers);
-    event.reply('asynchronous-reply', printers);
+    event.sender.send('asynchronous-reply', printers);
     printers.forEach(element => {
       if (element.name === deviceName) {
         console.log(element);
@@ -120,10 +120,10 @@ function initPrintEvent() {
       }
     });
     printWindow.webContents.print(
-      { silent: true, printBackground: true, deviceName: 'HP LaserJet 1020' },
+      { silent: true, printBackground: true, deviceName: deviceName },
       data => {
         console.log('回调', data);
-        event.sender.send('print-successs');
+        event.sender.send('asynchronous-reply', data);
       }
     );
   });
