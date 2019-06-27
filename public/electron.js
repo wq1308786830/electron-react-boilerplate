@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 
 const path = require('path');
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow } = require('electron');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -68,7 +68,6 @@ isDev &&
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  createPrintWindow();
 });
 
 // Quit when all windows are closed.
@@ -86,47 +85,3 @@ app.on('activate', function() {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
-let printWindow = null;
-function createPrintWindow() {
-  const windowOptions = {
-    width: 100,
-    height: 100,
-    title: '打印页',
-    show: false
-  };
-  printWindow = new BrowserWindow(windowOptions);
-  printWindow.loadURL(
-    path.resolve(path.join(__dirname, '../build/index.html'))
-  );
-
-  initPrintEvent();
-}
-
-function initPrintEvent() {
-  ipcMain.on('print-start', (event, deviceName) => {
-    console.log('print-start');
-    printWindow.webContents.send('print-edit', deviceName);
-  });
-
-  ipcMain.on('print', (event, deviceName = 'HP LaserJet 1020') => {
-    const printers = printWindow.webContents.getPrinters();
-    console.log(printers);
-    event.sender.send('asynchronous-reply', printers);
-    printers.forEach(element => {
-      if (element.name === deviceName) {
-        console.log(element);
-      }
-      if (element.name === deviceName && element.status != 0) {
-        mainWindow.send('print-error', deviceName + '打印机异常');
-        return;
-      }
-    });
-    printWindow.webContents.print(
-      { silent: true, printBackground: true, deviceName: deviceName },
-      data => {
-        console.log('回调', data);
-        event.sender.send('asynchronous-reply', data);
-      }
-    );
-  });
-}
