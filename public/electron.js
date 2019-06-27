@@ -1,6 +1,8 @@
 // Modules to control application life and create native browser window
 
 const path = require('path');
+const NodePdfPrinter = require('node-pdf-printer');
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -103,14 +105,8 @@ function createPrintWindow() {
 }
 
 function initPrintEvent() {
-  ipcMain.on('print-start', (event, deviceName) => {
-    console.log('print-start');
-    printWindow.webContents.send('print-edit', deviceName);
-  });
-
-  ipcMain.on('print', (event, deviceName = 'HP LaserJet 1020') => {
+  ipcMain.on('print', (event, deviceName = '') => {
     const printers = printWindow.webContents.getPrinters();
-    console.log(printers);
     event.sender.send('asynchronous-reply', printers);
     printers.forEach(element => {
       if (element.name === deviceName) {
@@ -121,12 +117,23 @@ function initPrintEvent() {
         return;
       }
     });
-    printWindow.webContents.print(
-      { silent: true, printBackground: true, deviceName: deviceName },
-      data => {
-        console.log('回调', data);
-        event.sender.send('asynchronous-reply', data);
-      }
-    );
+    nodePrinter();
+    // printWindow.webContents.print(
+    //   { silent: true, printBackground: true, deviceName: deviceName },
+    //   data => {
+    //     console.log('回调', data);
+    //     event.sender.send('asynchronous-reply', data);
+    //   }
+    // );
   });
+}
+
+function nodePrinter() {
+  NodePdfPrinter.listPrinter(); // 列出所有打印机名称
+
+  const array = ['C:\\Users\\flyin\\Desktop\\ReferenceCard.pdf']; // 待打印文件地址列表
+
+  NodePdfPrinter.printFiles(array); // 打印文件到Windows默认打印机
+
+  NodePdfPrinter.printFiles(array, 'OneNote'); // 打印文件到指定打印机
 }
