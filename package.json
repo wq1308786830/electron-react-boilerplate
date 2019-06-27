@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "author": "Russell <flyingcycling@outlook.com>",
   "description": "electron-react-boilerplate",
-  "productName": "electron-react-boilerplate",
+  "productName": "打印机",
   "main": "public/electron.js",
   "compression": "store",
-  "electronVersion": "5.0.5",
+  "electronVersion": "3.1.11",
   "private": true,
   "homepage": "./",
   "dependencies": {
